@@ -64,7 +64,6 @@ final class LocalNodeView: UIView, UITextFieldDelegate {
         
         apiKeyTextField.text = token
         apiKeyTextField.autocapitalizationType = .none
-        //apiKeyTextField.isSecureTextEntry = true
         apiKeyTextField.delegate = self
         apiKeyTextField.font = UIFont(name: Fonts.DMSans.regular.name, size: 16)
         
