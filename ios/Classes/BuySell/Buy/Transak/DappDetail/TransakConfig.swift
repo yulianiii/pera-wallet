@@ -28,10 +28,7 @@ struct TransakConfig {
         case .testnet:
             let key = Bundle.main.infoDictionary?["TRANSAK_STAGING_API_KEY"] as? String ?? .empty
             self.url = "https://global-stg.transak.com/?apiKey=\(key)&defaultCryptoCurrency=USDC&networks=algorand,mainnet&cryptoCurrencyList=ALGO,USDC&walletAddress=\(address)"
-        case .mainnet:
-            let key = Bundle.main.infoDictionary?["TRANSAK_PROD_API_KEY"] as? String ?? .empty
-            self.url =  "https://global.transak.com/?apiKey=\(key)&defaultCryptoCurrency=USDC&networks=algorand,mainnet&cryptoCurrencyList=ALGO,USDC&walletAddress=\(address)"
-        case .localnet:
+        case .mainnet, .localnet:
             let key = Bundle.main.infoDictionary?["TRANSAK_PROD_API_KEY"] as? String ?? .empty
             self.url =  "https://global.transak.com/?apiKey=\(key)&defaultCryptoCurrency=USDC&networks=algorand,mainnet&cryptoCurrencyList=ALGO,USDC&walletAddress=\(address)"
         }

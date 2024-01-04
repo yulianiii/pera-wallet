@@ -75,12 +75,7 @@ extension ALGAPI {
                     algorandWalletConnectV1ChainID,
                     algorandWalletConnectV1TestNetChainID
                 ]
-            case .mainnet:
-                return [
-                    algorandWalletConnectV1ChainID,
-                    algorandWalletConnectV1MainNetChainID
-                ]
-            case .localnet:
+            case .mainnet, .localnet:
                 return [
                     algorandWalletConnectV1ChainID,
                     algorandWalletConnectV1MainNetChainID
@@ -93,9 +88,7 @@ extension ALGAPI {
             switch self {
             case .testnet:
                 return algorandWalletConnectV2TestNetChainReference
-            case .mainnet:
-                return algorandWalletConnectV2MainNetChainReference
-            case .localnet:
+            case .mainnet, .localnet:
                 return algorandWalletConnectV2MainNetChainReference
             }
         }

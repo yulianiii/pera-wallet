@@ -33,7 +33,9 @@ final class ALGAPIBase {
         var node: AlgorandNode!
         if network == .testnet {
             node = testNetNode
-        } else if network == .localnet {
+        } else if network == .mainnet {
+            node = mainNetNode
+        } else {
             node = localNetNode
             
             let url = UserDefaults.standard.string(forKey: "urlString") ?? ""
@@ -44,8 +46,6 @@ final class ALGAPIBase {
             let keychain = KeychainAccess.Keychain(service: "com.algorand.algorand.token.private").accessibility(.whenUnlocked)
             let algodLocalToken = keychain.string(for: "algodLocalToken") ?? ""
             node.algodToken = algodLocalToken
-        } else {
-            node = mainNetNode
         }
         
         algodToken = node.algodToken
@@ -83,15 +83,15 @@ extension ALGAPIBase {
             case let .algod(network):
                 if network == .testnet {
                     return Environment.current.testNetAlgodApi
-                } else if network == .localnet {
+                } else if network == .mainnet {
+                    return Environment.current.mainNetAlgodApi
+                } else {
                     let url = UserDefaults.standard.string(forKey: "urlString") ?? ""
                     var port = UserDefaults.standard.string(forKey: "portString") ?? ""
                     port = port.isEmpty ? "" : ":\(port)"
                     let localMainNetAlgodApi = url + port + "/v2"
                     
                     return localMainNetAlgodApi
-                } else {
-                    return Environment.current.mainNetAlgodApi
                 }
             case let .indexer(network):
                 if network == .testnet {
