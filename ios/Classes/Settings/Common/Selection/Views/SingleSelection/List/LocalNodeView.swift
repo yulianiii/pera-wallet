@@ -118,23 +118,22 @@ final class LocalNodeView: UIView, UITextFieldDelegate {
     
     func updatedLocalNetValues() {
         if let text = urlTextField.text, text.isValidURL {
-            urlString = text.trimmingCharacters(in: .whitespaces)
+            urlString = text
             urlTextField.textColor = .black
         } else {
             urlTextField.textColor = .red
         }
         
         if let text = apiKeyTextField.text, !text.contains(" ") {
-            let apiKeyString = text.trimmingCharacters(in: .whitespaces)
             let keychain = KeychainAccess.Keychain(service: "com.algorand.algorand.token.private").accessibility(.whenUnlocked)
-             keychain.set(apiKeyString, for: "algodLocalToken")
+             keychain.set(text, for: "algodLocalToken")
             apiKeyTextField.textColor = .black
         } else {
             apiKeyTextField.textColor = .red
         }
         
         if let text = portTextField.text, !text.contains(" ") && text.isDigits {
-            portString = portTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
+            portString = text
             portTextField.textColor = .black
         } else {
             portTextField.textColor = .red
