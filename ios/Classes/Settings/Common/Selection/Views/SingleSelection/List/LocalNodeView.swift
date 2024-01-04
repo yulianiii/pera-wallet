@@ -117,13 +117,27 @@ final class LocalNodeView: UIView, UITextFieldDelegate {
     }
     
     func updatedLocalNetValues() {
-        urlString = urlTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
+        if let text = urlTextField.text, text.isValidURL {
+            urlString = text
+            urlTextField.textColor = .black
+        } else {
+            urlTextField.textColor = .red
+        }
         
-        let apiKeyString = apiKeyTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
-        let keychain = KeychainAccess.Keychain(service: "com.algorand.algorand.token.private").accessibility(.whenUnlocked)
-         keychain.set(apiKeyString, for: "algodLocalToken")
+        if let text = apiKeyTextField.text, !text.contains(" ") {
+            let keychain = KeychainAccess.Keychain(service: "com.algorand.algorand.token.private").accessibility(.whenUnlocked)
+             keychain.set(text, for: "algodLocalToken")
+            apiKeyTextField.textColor = .black
+        } else {
+            apiKeyTextField.textColor = .red
+        }
         
-        portString = portTextField.text?.trimmingCharacters(in: .whitespaces) ?? ""
+        if let text = portTextField.text, !text.contains(" ") && text.isDigits {
+            portString = text
+            portTextField.textColor = .black
+        } else {
+            portTextField.textColor = .red
+        }
         
         let nc = NotificationCenter.default
         nc.post(name: Notification.Name.updateLocalNetNotification, object: nil)
