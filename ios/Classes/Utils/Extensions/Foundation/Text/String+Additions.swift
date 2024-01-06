@@ -54,3 +54,22 @@ extension String? {
             .unwrap(URL.init)
     }
 }
+
+extension String {
+    var isValidURL: Bool {
+        let detector = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+        if let match = detector.firstMatch(in: self, options: [], range: NSRange(location: 0, length: self.utf16.count)) {
+            // it is a link, if the match covers the whole string
+            return match.range.length == self.utf16.count
+        } else {
+            return false
+        }
+    }
+    
+    var isDigits: Bool {
+        if isEmpty { return false }
+        // The inverted set of .decimalDigits is every character minus digits
+        let nonDigits = CharacterSet.decimalDigits.inverted
+        return rangeOfCharacter(from: nonDigits) == nil
+    }
+}

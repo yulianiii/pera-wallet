@@ -20,6 +20,7 @@ import MacaroonApplication
 import MacaroonUtils
 import MagpieAlamofire
 import MagpieCore
+import KeychainAccess
 
 final class ALGAPIBase {
     private(set) var algodToken: String?
@@ -28,7 +29,25 @@ final class ALGAPIBase {
 
     func setupNetworkBase(_ network: ALGAPI.Network) -> String {
         self.network = network
-        let node = network == .mainnet ? mainNetNode : testNetNode
+       
+        var node: AlgorandNode!
+        if network == .testnet {
+            node = testNetNode
+        } else if network == .mainnet {
+            node = mainNetNode
+        } else {
+            node = localNetNode
+            
+            let url = UserDefaults.standard.string(forKey: "urlString") ?? ""
+            var port = UserDefaults.standard.string(forKey: "portString") ?? ""
+            port = port.isEmpty ? "" : ":\(port)"
+            node.algodAddress = url + port + "/v2"
+            
+            let keychain = KeychainAccess.Keychain(service: "com.algorand.algorand.token.private").accessibility(.whenUnlocked)
+            let algodLocalToken = keychain.string(for: "algodLocalToken") ?? ""
+            node.algodToken = algodLocalToken
+        }
+        
         algodToken = node.algodToken
         indexerToken = node.indexerToken
         return node.algodAddress
@@ -64,8 +83,15 @@ extension ALGAPIBase {
             case let .algod(network):
                 if network == .testnet {
                     return Environment.current.testNetAlgodApi
-                } else {
+                } else if network == .mainnet {
                     return Environment.current.mainNetAlgodApi
+                } else {
+                    let url = UserDefaults.standard.string(forKey: "urlString") ?? ""
+                    var port = UserDefaults.standard.string(forKey: "portString") ?? ""
+                    port = port.isEmpty ? "" : ":\(port)"
+                    let localMainNetAlgodApi = url + port + "/v2"
+                    
+                    return localMainNetAlgodApi
                 }
             case let .indexer(network):
                 if network == .testnet {
@@ -94,7 +120,14 @@ extension ALGAPIBase {
 
 fileprivate extension String {
     var isAlgodApiBase: Bool {
-        return self == Environment.current.testNetAlgodApi || self == Environment.current.mainNetAlgodApi
+        let url = UserDefaults.standard.string(forKey: "urlString") ?? ""
+        var port = UserDefaults.standard.string(forKey: "portString") ?? ""
+        port = port.isEmpty ? "" : ":\(port)"
+        let localMainNetAlgodApi = url + port + "/v2"
+        
+        return self == Environment.current.testNetAlgodApi ||
+                self == Environment.current.mainNetAlgodApi ||
+                self == localMainNetAlgodApi
     }
 
     var isIndexerApiBase: Bool {
