@@ -150,13 +150,25 @@ extension RootViewController {
         let settingsTab =
             SettingsTabBarItem(NavigationContainer(rootViewController: settingsViewController))
 
-        mainContainer.items = [
-            homeTab,
-            discoverTab,
-            FixedSpaceTabBarItem(width: .noMetric),
-            collectiblesTab,
-            settingsTab
-        ]
+        var items: [TabBarItem]!
+        if #available(iOS 14.0, *) {
+            items = [
+                homeTab,
+                discoverTab,
+                FixedSpaceTabBarItem(width: .noMetric),
+                collectiblesTab,
+                settingsTab
+            ]
+        } else {
+            items = [
+                discoverTab,
+                homeTab,
+                FixedSpaceTabBarItem(width: .noMetric),
+                collectiblesTab,
+                settingsTab
+            ]
+        }
+        mainContainer.items = items
 
         setNeedsDiscoverTabBarItemUpdateIfNeeded()
     }
