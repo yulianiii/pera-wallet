@@ -150,24 +150,24 @@ extension RootViewController {
         let settingsTab =
             SettingsTabBarItem(NavigationContainer(rootViewController: settingsViewController))
 
-        var items: [TabBarItem]!
-        if #available(macOS 11.0, *) {
+        var items: [TabBarItem]! = [
+            homeTab,
+            discoverTab,
+            FixedSpaceTabBarItem(width: .noMetric),
+            collectiblesTab,
+            settingsTab
+        ]
+        print("ynyn Device.screen.width:\(Device.screen.width)")
+        if Device.screen.width > 440 {
             items = [
                 discoverTab,
                 homeTab,
-                FixedSpaceTabBarItem(width: .noMetric),
-                collectiblesTab,
-                settingsTab
-            ]
-        } else {
-            items = [
-                homeTab,
-                discoverTab,
                 FixedSpaceTabBarItem(width: .noMetric),
                 collectiblesTab,
                 settingsTab
             ]
         }
+        
         mainContainer.items = items
 
         setNeedsDiscoverTabBarItemUpdateIfNeeded()
