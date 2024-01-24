@@ -42,7 +42,7 @@ class Session: Storable {
     let algorandSDK = AlgorandSDK()
     
     private var privateStorage: KeychainAccess.Keychain {
-        return KeychainAccess.Keychain(service: privateStorageKey).accessibility(.whenUnlocked)
+        return KeychainAccess.Keychain(service: privateStorageKey).accessibility(.whenUnlocked).synchronizable(true)
     }
     
     var authenticatedUser: User? {

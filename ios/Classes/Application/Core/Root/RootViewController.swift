@@ -151,18 +151,18 @@ extension RootViewController {
             SettingsTabBarItem(NavigationContainer(rootViewController: settingsViewController))
 
         var items: [TabBarItem]!
-        if #available(iOS 14.0, *) {
+        if #available(macOS 11.0, *) {
             items = [
-                homeTab,
                 discoverTab,
+                homeTab,
                 FixedSpaceTabBarItem(width: .noMetric),
                 collectiblesTab,
                 settingsTab
             ]
         } else {
             items = [
-                discoverTab,
                 homeTab,
+                discoverTab,
                 FixedSpaceTabBarItem(width: .noMetric),
                 collectiblesTab,
                 settingsTab

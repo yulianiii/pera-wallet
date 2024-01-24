@@ -41,7 +41,7 @@ extension KeychainAccess.Keychain {
             return
         }
         
-        try? self.set(data, key: key)
+        try? self.set(data, key: key, ignoringAttributeSynchronizable: false)
     }
     
     func string(for key: String) -> String? {
@@ -58,7 +58,7 @@ extension KeychainAccess.Keychain {
         }
         
         do {
-            try self.set(value, key: key)
+            try self.set(value, key: key, ignoringAttributeSynchronizable: false)
         } catch {
             return
         }
